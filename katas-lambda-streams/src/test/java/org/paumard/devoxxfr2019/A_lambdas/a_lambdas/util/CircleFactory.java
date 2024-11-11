@@ -23,7 +23,22 @@ import java.util.function.Supplier;
 
 public interface CircleFactory extends Supplier<Circle> {
 
-    default List<Circle> getThree() {
-        return null; // TODO
+    static CircleFactory createFactory(Supplier<Circle> circleSupplier) {
+        return circleSupplier::get;
+
     }
+
+    static CircleFactory createFactory(Supplier<Circle> circleSupplier, String circleColor) {
+        return () -> new Circle( circleColor ) ;
+    }
+
+    default List<Circle> getThree() {
+        return List.of(new Circle(), new Circle(), new Circle());
+    }
+
+    default List<Circle> getThree(Supplier<Circle> circleSupplier) {
+       return List.of( circleSupplier.get(), circleSupplier.get(), circleSupplier.get() );
+    }
+
+
 }
