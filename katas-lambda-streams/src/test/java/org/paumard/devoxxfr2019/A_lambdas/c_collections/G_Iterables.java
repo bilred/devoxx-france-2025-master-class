@@ -35,7 +35,6 @@ public class G_Iterables {
      * in-place by appending the string "new" to each one.
      */
     @Test
-    @Ignore
     public void g_iterable01() {
 
         List<StringBuilder> sbList = Arrays.asList(
@@ -43,7 +42,7 @@ public class G_Iterables {
                 new StringBuilder("bravo"),
                 new StringBuilder("charlie"));
 
-        // TODO write code to modify sbList
+        sbList.forEach( sb -> sb.append("new"));
 
         List<String> strings = sbList.stream()
                 .map(StringBuilder::toString)

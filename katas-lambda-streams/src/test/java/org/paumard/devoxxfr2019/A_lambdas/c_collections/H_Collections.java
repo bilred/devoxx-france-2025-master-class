@@ -16,12 +16,12 @@
 
 package org.paumard.devoxxfr2019.A_lambdas.c_collections;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -34,13 +34,21 @@ public class H_Collections {
      * Remove the words that have odd lengths from the list.
      */
     @Test
-    @Ignore
     public void h_collection01() {
 
         List<String> list = new ArrayList<>(Arrays.asList(
                 "alfa", "bravo", "charlie", "delta", "echo", "foxtrot"));
 
-        // TODO write code to modify list
+        // java.util.ConcurrentModificationException
+        // for (String s : list) {
+        //    if(s.length() % 2 != 0) list.remove(s);
+        // }
+
+        //List<String> toRemove = list.stream().filter(s -> s.length() % 2 !=0 ).collect(Collectors.toList());
+        //list.removeAll(toRemove);
+
+        // method is designed to be used safely in a single-threaded context without causing ConcurrentModificationException
+        list.removeIf( s -> s.length() % 2 !=0 );
 
         assertThat(list).hasSize(2);
         assertThat(list).contains("alfa", "echo");

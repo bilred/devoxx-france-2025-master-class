@@ -20,7 +20,10 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -33,13 +36,12 @@ public class I_Lists {
      * Replace every word in the list with its upper case equivalent.
      */
     @Test
-    @Ignore
     public void i_list01() {
 
         List<String> strings = Arrays.asList(
                 "alfa", "bravo", "charlie", "delta", "echo", "foxtrot");
 
-        // TODO code to modify list
+        strings = strings.stream().map(String::toUpperCase).collect(Collectors.toList());
 
         assertThat(strings).containsExactly("ALFA", "BRAVO", "CHARLIE", "DELTA", "ECHO", "FOXTROT");
     }
@@ -48,13 +50,31 @@ public class I_Lists {
      * Replace every null value in the list with an empty String.
      */
     @Test
-    @Ignore
     public void i_list02() {
+
+
 
         List<String> strings = Arrays.asList(
                 "alfa", null, "charlie", "delta", null, "foxtrot");
 
-        // TODO code to modify strings
+        //strings = strings.stream()
+        //        .map(s ->
+        //            {
+        //                if (s == null) return "";
+        //                return s;
+        //            }
+        //).collect(Collectors.toList());
+
+        //Function<String, String> replaceNullVal = s -> {
+        //    if (s == null) return "";
+        //    return s;
+        //};
+
+        //strings = strings.stream()
+        //        .map(replaceNullVal)
+        //        .collect(Collectors.toList());
+
+        strings.replaceAll( s -> (s == null)? "" : s );
 
         assertThat(strings).containsExactly("alfa", "", "charlie", "delta", "", "foxtrot");
     }
@@ -64,13 +84,12 @@ public class I_Lists {
      * Try to use a factory method from Comparator.
      */
     @Test
-    @Ignore
     public void i_list03() {
 
         List<String> strings = Arrays.asList(
                 "one", "two", "three", "four", "five", "six");
 
-        // TODO code to modify strings
+        strings.sort(Comparator.naturalOrder());
 
         assertThat(strings).containsExactly("five", "four", "one", "six", "three", "two");
     }
@@ -81,13 +100,13 @@ public class I_Lists {
      * Try to use a factory method from Comparator.
      */
     @Test
-    @Ignore
     public void i_list04() {
 
         List<String> strings = Arrays.asList(
                 "one", "two", "three", "four", "five", "six");
 
-        // TODO code to modify strings
+        strings.sort(Comparator.comparing(String::length)
+                .thenComparing(Comparator.naturalOrder()));
 
         assertThat(strings).containsExactly("one", "six", "two", "five", "four", "three");
     }

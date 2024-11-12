@@ -20,6 +20,8 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -34,7 +36,6 @@ public class J_Maps {
      * You can check the Map.replaceAll() method.
      */
     @Test
-    @Ignore
     public void j_map01() {
 
         Map<Integer, String> map = new HashMap<>();
@@ -42,7 +43,13 @@ public class J_Maps {
         map.put(2, "bravo");
         map.put(3, "charlie");
 
-        // TODO write code to modify map
+        map = map.entrySet().stream().collect(
+                Collectors.toMap(
+                        Map.Entry::getKey,
+                        entry -> entry.getValue().toUpperCase()
+                )
+        );
+        //map.forEach((key, value) -> map.put(key, value.toUpperCase()));
 
         assertThat(map).hasSize(3);
         assertThat(map).containsKeys(1, 2, 3);
@@ -58,7 +65,6 @@ public class J_Maps {
      * You can check the Map.putIfAbsent() method.
      */
     @Test
-    @Ignore
     public void j_map02() {
 
         List<String> keys = Arrays.asList("a", "b", "c", "d", "e", "f", "g");
@@ -70,7 +76,9 @@ public class J_Maps {
         map.put("d", "delta");
         map.put("e", null);
 
-        // TODO write code to fix the map
+        keys.forEach( k ->
+            map.putIfAbsent(k, "")
+        );
 
         assertThat(map).hasSize(7);
         assertThat(map)
@@ -91,7 +99,6 @@ public class J_Maps {
      * You can check one of the Map.remove() method.
      */
     @Test
-    @Ignore
     public void j_map03() {
 
         List<String> keys = Arrays.asList("a", "b", "c", "d", "e", "f", "g");
@@ -105,7 +112,13 @@ public class J_Maps {
         map.put("f", "");
         map.put("g", "");
 
-        // TODO write code to fix the map
+        //map.forEach( (k, v) -> {
+        //    if(Objects.equals(map.get(k), "")) {
+        //        map.remove(k);
+        //    }
+        //});
+
+        map.values().removeIf(String::isBlank);
 
         assertThat(map).hasSize(4);
         assertThat(map)
@@ -123,7 +136,6 @@ public class J_Maps {
      * You can check one of the Map.replace() method.
      */
     @Test
-    @Ignore
     public void j_map04() {
 
         List<String> keys = Arrays.asList("a", "b", "c", "d", "e", "f", "g");
@@ -137,7 +149,7 @@ public class J_Maps {
         map.put("f", "");
         map.put("g", "");
 
-        // TODO write code to fix the map
+        map.replaceAll((k, v) -> ("".equals(v)? k : v ));
 
         assertThat(map).hasSize(7);
         assertThat(map)
