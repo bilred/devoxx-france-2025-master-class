@@ -37,10 +37,9 @@ public class B_Consumers {
      * Try to write this lambda using a method reference.
      */
     @Test
-    @Ignore
     public void b_consumer01() {
 
-        Consumer<List<String>> cons = null; // TODO
+        Consumer<List<String>> cons = List::clear;
 
         List<String> list = new ArrayList<>(Arrays.asList("a", "b", "c"));
         cons.accept(list);
@@ -52,10 +51,9 @@ public class B_Consumers {
      * string ")" to the given StringBuilder.
      */
     @Test
-    @Ignore
     public void b_consumer02() {
 
-        Consumer<StringBuilder> cons = null; // TODO
+        Consumer<StringBuilder> cons = s -> s.append(")");
 
         StringBuilder sb = new StringBuilder("Hello");
         cons.accept(sb);
@@ -67,10 +65,9 @@ public class B_Consumers {
      * string "(" as the first element of the given StringBuilder.
      */
     @Test
-    @Ignore
     public void b_consumer03() {
 
-        Consumer<StringBuilder> cons = null; // TODO
+        Consumer<StringBuilder> cons = s -> s.insert(0, "(");
 
         StringBuilder sb = new StringBuilder("Hello");
         cons.accept(sb);
@@ -85,10 +82,9 @@ public class B_Consumers {
      * and b_consumer3()
      */
     @Test
-    @Ignore
     public void b_consumer04() {
 
-        Consumer<StringBuilder> cons = null; // TODO
+        Consumer<StringBuilder> cons = s -> s.append(")").insert(0, "(");
 
         StringBuilder sb = new StringBuilder("Hello");
         cons.accept(sb);
@@ -100,12 +96,11 @@ public class B_Consumers {
      * given list. Try to write this lambda as a method reference.
      */
     @Test
-    @Ignore
     public void b_consumer05() {
 
         List<String> strings = new ArrayList<>(Arrays.asList("one", "two", "three"));
 
-        BiConsumer<List<String>, String> bicons = null; // TODO
+        BiConsumer<List<String>, String> bicons = List::add; // (list, s) -> list.add(s);
         bicons.accept(strings, "four");
 
         assertThat(strings).containsExactly("one", "two", "three", "four");
@@ -116,7 +111,6 @@ public class B_Consumers {
      * map. Try to write this lambda as a method reference.
      */
     @Test
-    @Ignore
     public void b_consumer06() {
 
         Map<Integer, String> map = new HashMap<>();
@@ -124,7 +118,7 @@ public class B_Consumers {
         map.put(2, "two");
         map.put(3, "three");
 
-        BiConsumer<Integer, String> bicons = null; // TODO
+        BiConsumer<Integer, String> bicons = map::put; // (k, v) -> map.put(k, v);
         bicons.accept(4, "four");
 
         assertThat(map).containsKeys(1, 2, 3, 4);

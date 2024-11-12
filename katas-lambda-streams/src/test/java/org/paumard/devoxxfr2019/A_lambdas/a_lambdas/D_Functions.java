@@ -36,10 +36,9 @@ public class D_Functions {
      * as a method reference.
      */
     @Test
-    @Ignore
     public void d_function01() {
 
-        Function<String, String> func = null; // TODO
+        Function<String, String> func = String::toUpperCase;
 
         assertThat(func.apply("abc")).isEqualTo("ABC");
     }
@@ -49,10 +48,9 @@ public class D_Functions {
      * string in parentheses.
      */
     @Test
-    @Ignore
     public void d_function02() {
 
-        Function<String, String> func = null; // TODO
+        Function<String, String> func = s-> String.format("(%s)", s); // s -> "("+ s + ")";
 
         assertThat(func.apply("abc")).isEqualTo("(abc)");
     }
@@ -62,10 +60,9 @@ public class D_Functions {
      * given String. Try to write this lambda as a method reference.
      */
     @Test
-    @Ignore
     public void d_function03() {
 
-        Function<String, Integer> func = null; // TODO
+        Function<String, Integer> func = String::length;
 
         assertThat(func.apply("")).isEqualTo(0);
         assertThat(func.apply("Hello!")).isEqualTo(6);
@@ -76,10 +73,9 @@ public class D_Functions {
      * if the given string is null, and the given string otherwise.
      */
     @Test
-    @Ignore
     public void d_function04() {
 
-        Function<String, String> func = null; // TODO
+        Function<String, String> func = s -> s == null? "" : s;
 
         assertThat(func.apply(null)).isEqualTo("");
         assertThat(func.apply("")).isEqualTo("");
@@ -92,10 +88,9 @@ public class D_Functions {
      * Try using the a_lambdas written in d_function3() and d_function4()
      */
     @Test
-    @Ignore
     public void d_function05() {
 
-        Function<String, Integer> func = null; // TODO
+        Function<String, Integer> func = s -> s == null? 0 : s.length();
 
         assertThat(func.apply(null)).isEqualTo(0);
         assertThat(func.apply("")).isEqualTo(0);
@@ -108,10 +103,9 @@ public class D_Functions {
      * first again.
      */
     @Test
-    @Ignore
     public void d_function06() {
 
-        BiFunction<String, String, String> bifunc = null; // TODO
+        BiFunction<String, String, String> bifunc = (s1, s2) -> s1 + s2 + s1;
 
         assertThat(bifunc.apply("-", "Hello")).isEqualTo("-Hello-");
     }
@@ -123,7 +117,6 @@ public class D_Functions {
      * Try to write this lambda using a method reference.
      */
     @Test
-    @Ignore
     public void d_function07() {
 
         BiFunction<String, String, Integer> bifunc = null; // TODO
