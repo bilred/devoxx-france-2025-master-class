@@ -43,10 +43,9 @@ public class F_Comparators {
      * For instance FOUR (4 letters) is greater than TWO (three letters)
      */
     @Test
-    @Ignore
     public void f_comparator01() {
 
-        Comparator<String> compareByLength = null; // TODO
+        Comparator<String> compareByLength = Comparator.comparingInt(String::length);
 
         assertThat(compareByLength.compare("FOUR", "TWO")).isGreaterThan(0);
         assertThat(compareByLength.compare("ONE", "SEVEN")).isLessThan(0);
@@ -58,10 +57,10 @@ public class F_Comparators {
      * If the lengths are the same, then use the alphabetical order.
      */
     @Test
-    @Ignore
     public void f_comparator02() {
 
-        Comparator<String> compareByLengthThenAlphabetical = null; // TODO
+        Comparator<String> compareByLengthThenAlphabetical = Comparator.comparingInt(String::length)
+                                                                       .thenComparing(Comparator.naturalOrder());
 
         assertThat(compareByLengthThenAlphabetical.compare("FOUR", "TWO")).isGreaterThan(0);
         assertThat(compareByLengthThenAlphabetical.compare("ONE", "SEVEN")).isLessThan(0);
@@ -74,10 +73,9 @@ public class F_Comparators {
      * Write a Comparator that compares instances of Person using their lastName.
      */
     @Test
-    @Ignore
     public void f_comparator03() {
 
-        Comparator<Person> compareByLastName = null; // TODO
+        Comparator<Person> compareByLastName = Comparator.comparing(Person::getLastName);
 
         assertThat(compareByLastName.compare(michael, rod)).isLessThan(0);
         assertThat(compareByLastName.compare(paul, paul)).isEqualTo(0);
@@ -89,10 +87,10 @@ public class F_Comparators {
      * lastName, and if their last name is the same, uses their first name.
      */
     @Test
-    @Ignore
     public void f_comparator04() {
 
-        Comparator<Person> compareByLastNameThenFirstName = null; // TODO
+        Comparator<Person> compareByLastNameThenFirstName = Comparator.comparing(Person::getLastName)
+                                                                      .thenComparing(Person::getFirstName);
 
         assertThat(compareByLastNameThenFirstName.compare(michael, rod)).isLessThan(0);
         assertThat(compareByLastNameThenFirstName.compare(paul, paul)).isEqualTo(0);
@@ -104,10 +102,11 @@ public class F_Comparators {
      * the one you wrote in the comparator04() exercise.
      */
     @Test
-    @Ignore
     public void f_comparator05() {
 
-        Comparator<Person> compareByLastNameThenFirstNameReversed = null; // TODO
+        Comparator<Person> compareByLastNameThenFirstNameReversed = Comparator.comparing(Person::getLastName)
+                                                                              .thenComparing(Person::getFirstName)
+                                                                              .reversed();
 
         assertThat(compareByLastNameThenFirstNameReversed.compare(michael, rod)).isGreaterThan(0);
         assertThat(compareByLastNameThenFirstNameReversed.compare(paul, paul)).isEqualTo(0);
@@ -120,10 +119,12 @@ public class F_Comparators {
      * values should be considered greater than any non-null values.
      */
     @Test
-    @Ignore
     public void f_comparator06() {
 
-        Comparator<Person> compareByLastNameThenFirstNameWithNull = null; // TODO
+        Comparator<Person> compareByLastNameThenFirstNameWithNull = Comparator.nullsLast(
+                 Comparator.comparing(Person::getLastName)
+                           .thenComparing(Person::getFirstName)
+        );
 
         assertThat(compareByLastNameThenFirstNameWithNull.compare(michael, rod)).isLessThan(0);
         assertThat(compareByLastNameThenFirstNameWithNull.compare(paul, paul)).isEqualTo(0);
@@ -137,10 +138,9 @@ public class F_Comparators {
      * Try to write the comparator so as to avoid boxing of primitives.
      */
     @Test
-    @Ignore
     public void f_comparator07() {
 
-        Comparator<Person> compareByAge = null; // TODO
+        Comparator<Person> compareByAge = Comparator.comparingInt(Person::getAge);
 
         assertThat(compareByAge.compare(michael, rod)).isLessThan(0);
         assertThat(compareByAge.compare(paul, paul)).isEqualTo(0);
@@ -153,10 +153,9 @@ public class F_Comparators {
      * Comparator interface.
      */
     @Test
-    @Ignore
     public void f_comparator08() {
 
-        Comparator<Person> compare = null; // TODO
+        Comparator<Person> compare = Comparator.naturalOrder();
 
         assertThat(compare.compare(michael, rod)).isLessThan(0);
         assertThat(compare.compare(paul, paul)).isEqualTo(0);
@@ -173,10 +172,14 @@ public class F_Comparators {
      * functional interface we use is IntBinaryOperator.
      */
     @Test
-    @Ignore
     public void f_comparator09() {
 
-        IntBinaryOperator intCompare = null; // TODO
+        //IntBinaryOperator intCompare = Integer::compare;
+         IntBinaryOperator intCompare = (n1, n2) -> {
+           if (n1 < n2) return -1;
+           if (n1 > n2) return 1;
+           return 0;
+         };
 
         assertThat(intCompare.applyAsInt(0, 1)).isLessThan(0);
         assertThat(intCompare.applyAsInt(1, 1)).isEqualTo(0);
@@ -191,10 +194,9 @@ public class F_Comparators {
      * a comparator.
      */
     @Test
-    @Ignore
     public void f_comparator10() {
 
-        IntBinaryOperator intCompare = null; // TODO
+        IntBinaryOperator intCompare = Integer::compare;
 
         assertThat(intCompare.applyAsInt(0, 1)).isLessThan(0);
         assertThat(intCompare.applyAsInt(1, 1)).isEqualTo(0);
@@ -216,10 +218,17 @@ public class F_Comparators {
      * and greater than any non-NaN value.
      */
     @Test
-    @Ignore
     public void f_comparator11() {
 
-        DoubleToIntBiFunction doubleCompare = null; // TODO
+        DoubleToIntBiFunction doubleCompare = Double::compare; // handles these NaN cases
+        //DoubleToIntBiFunction doubleCompare = (a, b) -> {
+        //    if (Double.isNaN(a)) {
+        //        return Double.isNaN(b) ? 0 : 1;
+        //    } else if (Double.isNaN(b)) {
+        //        return -1;
+        //    }
+        //    return Double.compare(a, b);
+        //};
 
         assertThat(doubleCompare.applyAsInt(0.0, 1.0)).isLessThan(0);
         assertThat(doubleCompare.applyAsInt(1.0, 1.0)).isEqualTo(0);

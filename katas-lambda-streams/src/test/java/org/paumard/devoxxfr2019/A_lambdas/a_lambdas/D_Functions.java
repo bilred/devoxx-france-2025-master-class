@@ -119,7 +119,7 @@ public class D_Functions {
     @Test
     public void d_function07() {
 
-        BiFunction<String, String, Integer> bifunc = null; // TODO
+        BiFunction<String, String, Integer> bifunc = String::indexOf;
 
         assertThat(bifunc.apply("Hello world", "Hello")).isEqualTo(0);
         assertThat(bifunc.apply("Hello world", "world")).isEqualTo(6);
@@ -132,11 +132,10 @@ public class D_Functions {
      * Try to write this lambda using a method reference.
      */
     @Test
-    @Ignore
     public void d_function08() {
 
         String pattern = "Hello world!";
-        Function<String, Integer> func = null; // TODO
+        Function<String, Integer> func = pattern::indexOf;
 
         assertThat(func.apply("Hello")).isEqualTo(0);
         assertThat(func.apply("world")).isEqualTo(6);
@@ -150,12 +149,11 @@ public class D_Functions {
      * lambda you wrote in d_function07().
      */
     @Test
-    @Ignore
     public void d_function09() {
 
         String pattern = "Hello world!";
 
-        Function<String, Integer> func = null; // TODO
+        Function<String, Integer> func = pattern::indexOf;
 
         assertThat(func.apply("Hello")).isEqualTo(0);
         assertThat(func.apply("world")).isEqualTo(6);
