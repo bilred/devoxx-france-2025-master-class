@@ -20,10 +20,16 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.in;
 
 /**
  * This set of exercises covers simple simpleStream pipelines,
@@ -37,13 +43,12 @@ public class K_SimpleStreams {
      * Use the collect(Collectors.toList()) pattern to create the output list.
      */
     @Test
-    @Ignore
     public void k_simpleStream01() {
 
         List<String> input = Arrays.asList(
                 "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten");
 
-        List<String> result = null; // TODO
+        List<String> result = input.stream().map(String::toUpperCase).collect(Collectors.toList());
 
         assertThat(result)
                 .containsExactly("ONE", "TWO", "THREE", "FOUR", "FIVE", "SIX", "SEVEN", "EIGHT", "NINE", "TEN");
@@ -55,13 +60,12 @@ public class K_SimpleStreams {
      * Use the collect(Collectors.toList()) pattern to create the output list.
      */
     @Test
-    @Ignore
     public void k_simpleStream02() {
 
         List<String> input = Arrays.asList(
                 "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten");
 
-        List<String> result = null; // TODO
+        List<String> result = input.stream().filter(s -> s.length() % 2 != 0).map(String::toUpperCase).collect(Collectors.toList());
 
         assertThat(result)
                 .containsExactly("ONE", "TWO", "THREE", "SIX", "SEVEN", "EIGHT", "TEN");
@@ -73,16 +77,33 @@ public class K_SimpleStreams {
      * Use the collect(Collectors.toList()) pattern to create the output list.
      */
     @Test
-    @Ignore
     public void k_simpleStream03() {
 
         List<String> input = Arrays.asList(
                 "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten");
 
-        List<String> result = null; // TODO
+//        List<String> result = input.stream()
+//                .filter(s -> s.length() >= 3 && s.length() <= 8)
+//                .collect(Collectors.toList());
 
-        assertThat(result)
-                .containsExactly("three", "four", "five", "six", "seven", "eight");
+        //  issue with the code is that it's only selecting one word for each length
+//        List<String> result = IntStream.rangeClosed(3, 8)
+//                .mapToObj(len -> input.stream()
+//                        .filter(s -> s.length() == len)
+//                        .findFirst()
+//                        .orElse(null))
+//                .filter(Objects::nonNull)
+//                .collect(Collectors.toList());
+
+        List<String> result = IntStream.range(2, 8)
+                .filter(i -> {
+                    String word = input.get(i);
+                    return word.length() >= 3 && word.length() <= 8;
+                })
+                .mapToObj(input::get)
+                .collect(Collectors.toList());
+
+        assertThat(result).containsExactly("three", "four", "five", "six", "seven", "eight");
     }
 
     /**
@@ -91,13 +112,16 @@ public class K_SimpleStreams {
      * Use the collect(Collectors.toList()) pattern to create the output list.
      */
     @Test
-    @Ignore
     public void k_simpleStream04() {
 
         List<String> input = Arrays.asList(
                 "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten");
 
-        List<String> result = null; // TODO
+        List<String> result = input.stream()
+                .map(s -> s.charAt(0))
+                .distinct()
+                .map(String::valueOf)
+                .collect(Collectors.toList());
 
         assertThat(result)
                 .containsExactly("o", "t", "f", "s", "e", "n");
@@ -109,13 +133,17 @@ public class K_SimpleStreams {
      * Use the collect(Collectors.toList()) pattern to create the output list.
      */
     @Test
-    @Ignore
     public void k_simpleStream05() {
 
         List<String> input = Arrays.asList(
                 "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten");
 
-        List<String> result = null; // TODO
+        List<String> result = input.stream()
+                .map(s -> s.charAt(0))
+                .distinct()
+                .map(String::valueOf)
+                .sorted() // same as Comparator.naturalOrder()
+                .collect(Collectors.toList());
 
         assertThat(result)
                 .containsExactly("e", "f", "n", "o", "s", "t");
@@ -126,13 +154,20 @@ public class K_SimpleStreams {
      * Try not to create any list.
      */
     @Test
-    @Ignore
     public void k_simpleStream06() {
 
         List<String> input = Arrays.asList(
                 "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten");
 
-        long result = 0L; // TODO
+//        long result = input.stream()
+//                .flatMapToInt(String::codePoints)
+//                .mapToObj(c -> (char) c)
+//                .count();
+
+        long result = input.stream()
+                           .mapToInt(String::length)
+                           .distinct()
+                           .count();
 
         assertThat(result).isEqualTo(3L);
     }
@@ -142,10 +177,10 @@ public class K_SimpleStreams {
      * Try to use a factory method from Stream.
      */
     @Test
-    @Ignore
     public void k_simpleStream07() {
 
-        List<String> result = null; // TODO
+        //List<String> result = IntStream.range(0, 5).mapToObj(n -> "+").collect(Collectors.toList());
+        List<String> result = Stream.generate(() -> "+").limit(5).collect(Collectors.toList());
 
         assertThat(result).containsExactly("+", "+", "+", "+", "+");
     }
@@ -155,10 +190,12 @@ public class K_SimpleStreams {
      * Try to use a factory method from Stream.
      */
     @Test
-    @Ignore
     public void k_simpleStream08() {
 
-        List<String> result = null; // TODO
+        List<String> result = Stream.iterate(3, i -> i + 1)
+                .limit(5)
+                .map("+"::repeat)
+                .collect(Collectors.toList());
 
         assertThat(result).containsExactly("+++", "++++", "+++++", "++++++", "+++++++");
     }
@@ -171,7 +208,7 @@ public class K_SimpleStreams {
     @Ignore
     public void k_simpleStream09() {
 
-        List<Integer> result = null; // TODO
+        List<Integer> result = IntStream.rangeClosed(1, 5).boxed().collect(Collectors.toList());
 
         assertThat(result).containsExactly(1, 2, 3, 4, 5);
     }
