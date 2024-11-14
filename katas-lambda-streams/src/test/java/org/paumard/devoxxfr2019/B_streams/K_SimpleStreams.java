@@ -205,7 +205,6 @@ public class K_SimpleStreams {
      * Try to avoid the boxing of integers until the list is created.
      */
     @Test
-    @Ignore
     public void k_simpleStream09() {
 
         List<Integer> result = IntStream.rangeClosed(1, 5).boxed().collect(Collectors.toList());
@@ -219,10 +218,15 @@ public class K_SimpleStreams {
      * and with no doubles.
      */
     @Test
-    @Ignore
     public void k_simpleStream10() {
 
-        Function<String, List<String>> wordToLetters = null; // TODO
+        Function<String, List<String>> wordToLetters = s -> s.toLowerCase().chars()
+                                                            .mapToObj(c -> (char) c)
+                                                            .filter(Character::isLetter)
+                                                            .distinct()
+                                                            .map(String::valueOf)
+                                                            .sorted()
+                                                            .collect(Collectors.toList());
 
         assertThat(wordToLetters.apply("Hello world")).containsExactly("d", "e", "h", "l", "o", "r", "w");
     }
