@@ -29,6 +29,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.IntSupplier;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -48,10 +49,18 @@ public class M_Reductions {
      * Compute the sums of the 10 first integers starting with 1.
      */
     @Test
-    @Ignore
     public void m_reduction01() {
 
-        int sum = 0; // TODO
+//        int sum = IntStream.rangeClosed( 1, 10000)
+//                .limit(10)
+//                .mapToObj( String::valueOf )
+//                .filter( s -> s.startsWith("1"))
+//                .mapToInt(Integer::parseInt)
+//                .sum();
+
+        int sum = IntStream.rangeClosed(1, 10)
+                .sum();
+
 
         assertThat(sum).isEqualTo(55);
     }
@@ -59,11 +68,14 @@ public class M_Reductions {
     /**
      * Compute the factorial of 21. This number is quite large.
      */
+    private BigInteger factorial(int n) {
+        return (n == 0)? BigInteger.ONE : BigInteger.valueOf(n).multiply( factorial(n - 1) );
+    }
+
     @Test
-    @Ignore
     public void m_reduction02() {
 
-        BigInteger result = BigInteger.ONE; // TODO
+        BigInteger result = factorial(21);
 
         assertThat(result).isEqualTo(new BigInteger("51090942171709440000"));
     }
@@ -76,7 +88,6 @@ public class M_Reductions {
      * just adds 1..9 to the content of the StringBuilder.
      */
     @Test
-    @Ignore
     public void m_reduction03() {
 
         List<Consumer<StringBuilder>> consumers =
