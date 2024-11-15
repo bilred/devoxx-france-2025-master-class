@@ -27,10 +27,14 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.in;
 
 /**
  * This set of exercises covers harder stream pipelines,
@@ -48,10 +52,9 @@ public class L_HarderStreams {
      * opened for you.
      */
     @Test
-    @Ignore
     public void l_harderStream01() {
 
-        long count = 0; // TODO
+        long count = reader.lines().count();
 
         assertThat(count).isEqualTo(14);
     }
@@ -63,10 +66,15 @@ public class L_HarderStreams {
      * opened for you.
      */
     @Test
-    @Ignore
     public void l_harderStream02() {
+//        Comparator<String> comparatorByLength = Comparator.comparing(String::length).thenComparing(String::compareTo);
+//        Optional<String> bigestString = reader.lines().max( comparatorByLength );
+//        int longestLength = bigestString.map(String::length).orElse(0);0
 
-        int longestLength = 0; // TODO
+        int longestLength = reader.lines()
+                            .mapToInt(String::length)
+                            .max()
+                            .orElse(0);
 
         assertThat(longestLength).isEqualTo(53);
     }
@@ -78,10 +86,11 @@ public class L_HarderStreams {
      * opened for you.
      */
     @Test
-    @Ignore
     public void l_harderStream03() {
+        Comparator<String> comparatorByLength = Comparator.comparing(String::length).thenComparing(Comparator.naturalOrder());
+        Optional<String> bigEstString = reader.lines().max( comparatorByLength );
 
-        String longestLine = null; // TODO
+        String longestLine = bigEstString.orElse("");
 
         assertThat(longestLine).isEqualTo("Feed'st thy light's flame with self-substantial fuel,");
     }
@@ -90,13 +99,12 @@ public class L_HarderStreams {
      * Select one of the longest words from the input list.
      */
     @Test
-    @Ignore
     public void l_harderStream04() {
 
         List<String> input = Arrays.asList(
                 "alfa", "bravo", "charlie", "delta", "echo", "foxtrot", "golf", "hotel");
 
-        String result = null; // TODO
+        String result = input.stream().max(Comparator.comparing(String::length)).get();
 
         assertThat(result).isIn("charlie", "foxtrot");
     }
@@ -107,13 +115,17 @@ public class L_HarderStreams {
      * You can use a variant of the function created for K_SimpleStreams.simpleStream10().
      */
     @Test
-    @Ignore
     public void l_harderStream05() {
 
         List<String> input = Arrays.asList(
                 "alfa", "bravo", "charlie", "delta", "echo", "foxtrot", "golf", "hotel");
 
-        List<String> result = null; // TODO
+        List<String> result = input.stream()
+                .flatMap( s -> s.chars().mapToObj( c -> (char) c) )
+                .map(String::valueOf)
+                .distinct()
+                .sorted()
+                .collect(Collectors.toList());
 
         assertThat(result).containsExactly("a", "b", "c", "d", "e", "f", "g", "h", "i", "l", "o", "r", "t", "v", "x");
     }
@@ -129,10 +141,11 @@ public class L_HarderStreams {
      * the text file.
      */
     @Test
-    @Ignore
     public void l_harderStream06() {
 
-        List<String> output = null; // TODO
+        List<String> output = reader.lines()
+                .flatMap( SPLIT_PATTERN::splitAsStream )
+                .collect(Collectors.toList());
 
         assertThat(output).isEqualTo(
                 Arrays.asList(
@@ -160,10 +173,14 @@ public class L_HarderStreams {
      * opened for you.
      */
     @Test
-    @Ignore
     public void l_harderStream07() {
 
-        List<String> output = null; // TODO
+        List<String> output = reader.lines()
+                .flatMap( SPLIT_PATTERN::splitAsStream )
+                .filter(s -> s.length() >= 8)
+                .map(String::toLowerCase)
+                .sorted()
+                .collect(Collectors.toList());
 
         assertThat(output).isEqualTo(
                 Arrays.asList(
@@ -177,10 +194,14 @@ public class L_HarderStreams {
      * (Same as above except for reversed sort order.)
      */
     @Test
-    @Ignore
     public void l_harderStream08() {
 
-        List<String> output = null; // TODO
+        List<String> output = reader.lines()
+                .flatMap( SPLIT_PATTERN::splitAsStream )
+                .filter(s -> s.length() >= 8)
+                .map(String::toLowerCase)
+                .sorted(Comparator.reverseOrder())
+                .collect(Collectors.toList());
 
         assertThat(output).isEqualTo(
                 Arrays.asList(
@@ -196,10 +217,14 @@ public class L_HarderStreams {
      * opened for you.
      */
     @Test
-    @Ignore
     public void l_harderStream09() {
 
-        List<String> output = null; // TODO
+        List<String> output = reader.lines()
+                .flatMap( SPLIT_PATTERN::splitAsStream )
+                .map(String::toLowerCase)
+                .distinct()
+                .sorted(Comparator.comparingInt(String::length).thenComparing(Comparator.naturalOrder()))
+                .collect(Collectors.toList());
 
         assertThat(output).isEqualTo(
                 Arrays.asList(
