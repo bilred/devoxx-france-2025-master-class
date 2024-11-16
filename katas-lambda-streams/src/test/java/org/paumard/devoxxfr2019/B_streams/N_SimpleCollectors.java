@@ -20,9 +20,12 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.in;
 
 /**
  * This set of exercises covers the collect() terminal operation with the basic collectors.
@@ -37,13 +40,12 @@ public class N_SimpleCollectors {
      * Try to use a collector from the Collectors factory class.
      */
     @Test
-    @Ignore
     public void n_simpleCollector01() {
 
         List<String> input = Arrays.asList(
                 "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten");
 
-        long count = 0L; // TODO
+        long count = input.stream().collect(Collectors.counting());
 
         assertThat(count).isEqualTo(10L);
     }
@@ -53,13 +55,12 @@ public class N_SimpleCollectors {
      * Try to use a collector from the Collectors factory class.
      */
     @Test
-    @Ignore
     public void n_simpleCollector02() {
 
         List<String> input = Arrays.asList(
                 "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten");
 
-        String max = null; // TODO
+        String max = input.stream().collect(Collectors.maxBy(Comparator.naturalOrder())).get();
 
         assertThat(max).isEqualTo("two");
     }
@@ -69,13 +70,14 @@ public class N_SimpleCollectors {
      * Try to use a collector from the Collectors factory class.
      */
     @Test
-    @Ignore
     public void n_simpleCollector03() {
 
         List<String> input = Arrays.asList(
                 "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten");
 
-        int minLength = 0; // TODO
+        //int minLength = input.stream().collect(Collectors.minBy(Comparator.comparingInt(String::length))).get().length();
+        //int minLength = input.stream().collect(Collectors.mapping(String::length, Collectors.minBy(Comparator.naturalOrder()))).orElse(0);
+        int minLength = input.stream().map(String::length).min(Comparator.naturalOrder()).orElse(0);
 
         assertThat(minLength).isEqualTo(3);
     }
@@ -85,13 +87,12 @@ public class N_SimpleCollectors {
      * Try to use a collector from the Collectors factory class.
      */
     @Test
-    @Ignore
     public void n_simpleCollector04() {
 
         List<String> input = Arrays.asList(
                 "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten");
 
-        double averageLength = 0; // TODO
+        double averageLength = input.stream().collect(Collectors.averagingDouble(String::length));
 
         assertThat(averageLength).isEqualTo(3.9d);
     }
@@ -101,12 +102,12 @@ public class N_SimpleCollectors {
      * Try to use a collector from the Collectors factory class.
      */
     @Test
-    @Ignore
     public void n_simpleCollector05() {
 
         List<Integer> input = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9);
 
-        int sum = 0; // TODO
+        int sum = input.stream().collect(Collectors.summingInt( Integer::intValue ));
+        //int sum = input.stream().mapToInt(Integer::intValue).sum();
 
         assertThat(sum).isEqualTo(45);
     }
@@ -116,13 +117,13 @@ public class N_SimpleCollectors {
      * Try to use a collector from the Collectors factory class.
      */
     @Test
-    @Ignore
     public void n_simpleCollector06() {
 
         List<String> input = Arrays.asList(
                 "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten");
 
-        String result = null; // TODO
+        String result = input.stream().collect(Collectors.joining(" "));
+        //String result = String.join(" ", input);
 
         assertThat(result).isEqualTo("one two three four five six seven eight nine ten");
     }
