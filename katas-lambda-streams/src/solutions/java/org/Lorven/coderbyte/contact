@@ -1,0 +1,27 @@
+Kavitha Palled
+
+// QCM: (see the screanshoot attached
+- in spring boot how can configure custom error page for specifique http code status?
+- How in Spring boot How configure multiple data source? do I need to implementing a custom DataSourceConfiguration class
+- in java 8 with lambda I want to sort list of string base on length? without comparator
+
+- With ConcurrentHashMap, I want to transform the keys to new collections, I WANT TO process only thoes meet the condition? How
+forEachKey: Efficient for processing large maps, especially with parallelism.
+forEach: Ideal when you need access to both keys and values.
+
+- java 8, using lambda expretions, I have anonymous inner class that implments an interface with multiples methodes.
+  What is the chalange with directly convrt to lambda?
+
+- java 8 ConcurrentHashMap<key, prodect price> I want to find max price in large hashmap using parallelisme and max effeciancy? can I use merge() or compute() or foEchValue()
+
+- Is in the java.time.YearMonth exsite ? Yes, java.time.YearMonth exists
+It is used to represent a year and month (e.g., 2024-10), without a specific day, time, or timezone.
+
+////////////////////////
+Coding test: Level Hard
+////////////////////////
+check the Main class I have done during the test
+But better solution will be to use the Jikstra algorithem insted the BSF
+
+Here is the description of the coding test:
+
