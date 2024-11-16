@@ -27,6 +27,7 @@ import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.IntSupplier;
@@ -58,8 +59,8 @@ public class M_Reductions {
 //                .mapToInt(Integer::parseInt)
 //                .sum();
 
-        int sum = IntStream.rangeClosed(1, 10)
-                .sum();
+        //int sum = IntStream.rangeClosed(1, 10).sum();
+        int sum = IntStream.rangeClosed(1, 10).reduce(0, Integer::sum);
 
 
         assertThat(sum).isEqualTo(55);
@@ -75,7 +76,11 @@ public class M_Reductions {
     @Test
     public void m_reduction02() {
 
-        BigInteger result = factorial(21);
+        // BigInteger result = factorial(21);
+        // using IntStream to calculate the factorial, which can easily lead to integer overflow for larger numbers
+        BigInteger result = IntStream.rangeClosed(1, 21)
+                                .mapToObj(BigInteger::valueOf)
+                                .reduce(BigInteger.ONE, BigInteger::multiply);
 
         assertThat(result).isEqualTo(new BigInteger("51090942171709440000"));
     }
@@ -95,7 +100,9 @@ public class M_Reductions {
                         .mapToObj(index -> (Consumer<StringBuilder>) (sb -> sb.append(index)))
                         .collect(Collectors.toList());
 
-        Consumer<StringBuilder> consumer = null; // TODO
+        Consumer<StringBuilder> consumer = consumers.stream()
+                .reduce(Consumer::andThen)
+                .orElse( sb -> {} );
 
         StringBuilder sb = new StringBuilder("Hello");
         consumer.accept(sb);
@@ -111,7 +118,6 @@ public class M_Reductions {
      * tested String.
      */
     @Test
-    @Ignore
     public void m_reduction04() {
 
         List<Predicate<String>> predicates =
@@ -120,7 +126,8 @@ public class M_Reductions {
                         .map(index -> (Predicate<String>) (s -> s.contains(index)))
                         .collect(Collectors.toList());
 
-        Predicate<String> predicate = null; // TODO
+        Predicate<String> predicate = predicates.stream()
+                .reduce( p -> false, Predicate::or);
 
         assertThat(predicate.test("Hello 01")).isTrue();
         assertThat(predicate.test("Hello")).isFalse();
@@ -133,10 +140,12 @@ public class M_Reductions {
      * opened for you.
      */
     @Test
-    @Ignore
     public void m_reduction05() {
 
-        String result = null; // TODO
+        // For each pair of words, it always returns the second word.
+        String result = reader.lines()
+                .flatMap( SPLIT_PATTERN::splitAsStream )
+                .reduce("", (first, second) -> second);
 
         assertThat(result).isEqualTo("thee");
     }
