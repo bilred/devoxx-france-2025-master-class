@@ -18,10 +18,16 @@ forEach: Ideal when you need access to both keys and values.
 It is used to represent a year and month (e.g., 2024-10), without a specific day, time, or timezone.
 
 ////////////////////////
-Coding test: Level Hard
+Coding test: Level Hard => ShortestPath(strArr)
 ////////////////////////
 check the Main class I have done during the test
 But better solution will be to use the Jikstra algorithem insted the BSF
 
 Here is the description of the coding test:
+In java I need code a founction called ShortestPath(strArr), strArr will be an array of strings witch models a non-looping graph. the structure of the array will follows: "the first element in the array will be the number of nodes N (points) in the array as String. The N elements will be the nodes which can be anything (A, B, C, .. Brick Street, Main Street .. etc). Then after the Nth element, the rest of the elements in the array wil be the connections between all of the nodes. They will look like this: (A-B, B-C, ... etc.). Althougth, there may exist no connections at all"
 
+an example of strArr may be: ["4", "A", "B", "C", "D", "A-B", "B-D", "B-C", "C-D"] The program should return the shortest path from the first Node to the last Node in the array separated by dashes.
+
+Here is other example with strArr being ["7", "A", "B", "C", "D", "E", "F", "G", "A-B", "A-E", "B-C", "C-D", "D-F", "E-D", "F-G"] the output for this array should be A-E-D-F-G
+
+There will only ever be one shortest path for the array. if no path between the first and last node exists, return -1. the array will at minimum have two nodes. also the connection A-B for example, means that A can get to B and B can get to A.
