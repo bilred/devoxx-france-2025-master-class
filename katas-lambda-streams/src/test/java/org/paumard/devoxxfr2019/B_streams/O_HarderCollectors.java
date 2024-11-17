@@ -26,11 +26,16 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
+import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.regex.Pattern;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
@@ -55,10 +60,11 @@ public class O_HarderCollectors {
      * use SPLIT_PATTERN for splitting the line into words.
      */
     @Test
-    @Ignore
     public void o_harderCollector01() {
 
-        Map<Integer, List<String>> result = null; // TODO
+        Map<Integer, List<String>> result = reader.lines()
+                .flatMap( SPLIT_PATTERN::splitAsStream )
+                .collect(Collectors.groupingBy(String::length));
 
         assertThat(result).hasSize(11);
         assertThat(result.get(8)).containsExactly("increase", "beauty's", "ornament");
@@ -77,11 +83,15 @@ public class O_HarderCollectors {
      * This is the same as the previous exercise except
      * the map values are the count of words instead of a list of words.
      */
+
+
     @Test
-    @Ignore
     public void o_harderCollector02() {
 
-        Map<Integer, Long> result = null; // TODO
+        Map<Integer, Long> result = reader.lines()
+                .flatMap( SPLIT_PATTERN::splitAsStream )
+                //.map(String::toString)
+                .collect(Collectors.groupingBy( String::length, Collectors.counting() ));
 
         assertThat(result).hasSize(11);
         assertThat(result.get(1)).isEqualTo(1L);
@@ -107,10 +117,15 @@ public class O_HarderCollectors {
      * groupingBy() and the other that uses toMap().
      */
     @Test
-    @Ignore
     public void o_harderCollector03() {
 
-        Map<String, Long> result = null; // TODO
+        //Map<String, Long> result = reader.lines()
+        //        .flatMap( SPLIT_PATTERN::splitAsStream )
+        //        .collect(Collectors.groupingBy( k -> k, Collectors.counting() ));
+
+        Map<String, Long> result = reader.lines()
+                .flatMap( SPLIT_PATTERN::splitAsStream )
+                .collect( Collectors.toMap( Function.identity(), word -> 1L, Long::sum ));
 
         assertThat(result).hasSize(87);
         assertThat(result.get("tender")).isEqualTo(2L);
@@ -131,7 +146,6 @@ public class O_HarderCollectors {
      * You can use a variant of the function created for K_SimpleStreams.simpleStream10().
      */
     @Test
-    @Ignore
     public void o_harderCollector04() {
 
         String leastUsedLetter = null; // TODO
@@ -210,6 +224,12 @@ public class O_HarderCollectors {
 // END OF EXERCISES
 // TEST INFRASTRUCTURE IS BELOW
 // ========================================================
+
+    static final Function<String, String> LOGS = in ->
+    {
+        System.out.println("in value" + in);
+        return in;
+    };
 
 
     // Pattern for splitting a string into words

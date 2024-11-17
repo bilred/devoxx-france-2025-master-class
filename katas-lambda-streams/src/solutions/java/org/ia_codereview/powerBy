@@ -1,0 +1,32 @@
+https://exam.devskiller.com/exam.html?PRWT-HU63-GQUD#!/
+
+Your Task
+
+Review the LLM prompt and requirements and evaluate the Response1 and Response2 files for your programming language
+Pick which response satisfies the prompt more accurately and review the code for that response against the Response Requirements
+Input your final evaluation into Assessment.txt and explain why one response is better than the other
+Only complete the tasks for 1 programming language / folder of your choosing
+Prompt provided to the LLM
+
+"i need code that takes in a number and returns the opposite of that numbe so wirttan backwards"
+
+Response Requirements
+
+The response must have code
+The response must use the correct programming language
+The response must implement a function
+The function must receive an integer argument
+The response must return the integer written in reverse
+Hints and Tips
+
+Review each Response and choose which one comes the closest to satisfying the prompt
+If the prompt asks for code, the response must provide it
+If a response generates code, you must ensure the code runs without errors
+If there are errors in the code, use the comment feature to correct the code
+The response must satisfy but not go beyond the Response Requirements listed above
+The Response Requirements are more important than code functionality
+Do not rewrite the function, only fix the errors
+At the end, choose which Response is better, and justify your answer in the Assessment.txt file
+Provide details describing why you chose that Response
+Be mindful of your grammar
+You may use Grammarly, but you may not use an LLM like ChatGPT
