@@ -1,0 +1,110 @@
+Q1:
+Find solution for this coding Qustion1 by completing the function "public static int findMaximumTasks(List<Integer> task, int m) {}" the given n tasks represented by an array "task" and nodes "m", so for optimal performance tasks must bedistributed evenly across these nodes. all nodes aould serve the same number of tasks. Each task assigned to a single node must be different.
+Note: all nodes must be assigned an equal number of tasks.
+Example:
+n = 7
+task = [1, 2, 2, 1, 3, 1, 3]
+m = 2
+One optimal way to allocate the tasks is:
+- The 1st node works on the 1st, 2nd and 5th tasks.
+- The 2nd node works on the 3th, 4th and 7th tasks.
+A total of 6 tasks can be accomplished this way.
+
+if needed update the code above and use the example here to see if we get the same output
+
+import java.util.*;
+
+public class TaskDistributor {
+    public static int findMaximumTasks(List<Integer> task, int m) {
+        // Step 1: Count task frequencies
+        Map<Integer, Integer> frequencyMap = new HashMap<>();
+        for (int t : task) {
+            frequencyMap.put(t, frequencyMap.getOrDefault(t, 0) + 1);
+        }
+
+        // Step 2: Binary search to determine the maximum tasks per node
+        int low = 0, high = task.size() / m; // Maximum possible tasks per node
+        int result = 0;
+
+        while (low <= high) {
+            int mid = (low + high) / 2;
+            if (canDistributeTasks(frequencyMap, m, mid)) {
+                result = mid; // Mid is a valid configuration
+                low = mid + 1; // Try for more tasks per node
+            } else {
+                high = mid - 1; // Try for fewer tasks per node
+            }
+        }
+
+        return result * m; // Total tasks accomplished
+    }
+
+    private static boolean canDistributeTasks(Map<Integer, Integer> frequencyMap, int nodes, int tasksPerNode) {
+        int totalSlots = nodes * tasksPerNode;
+        List<Integer> frequencies = new ArrayList<>(frequencyMap.values());
+
+        for (int freq : frequencies) {
+            totalSlots -= Math.min(freq, tasksPerNode); // Assign as many tasks as possible
+            if (totalSlots <= 0) {
+                return true; // All slots are filled
+            }
+        }
+
+        return totalSlots <= 0; // Check if we filled all slots
+    }
+
+    public static void main(String[] args) {
+        List<Integer> task = Arrays.asList(1, 2, 2, 1, 3, 1, 3);
+        int m = 2;
+        System.out.println(findMaximumTasks(task, m)); // Expected Output: 6
+    }
+}
+
+---------
+---------
+Q2:
+Question 2 is: complet the method "static int countIncreasingSegments(List<Integer> yCoordinates, int k) {}" A graph with the adjacent points is represented as an arry, yCoordintes, such that the array index represents the X-coordinate and the corresponding element represents the Y-coordinate. Formallay each point (x,y) is represented as (i, yCoordinates[i]) 0<=i<n
+Find the number of incrriasing segments that span exactely k consecutive X-corrdinates.
+
+Notes: A segment of graphe is said to be increasing if, for any two points (x1,y1) and (x2,y2) the value of (y2-y1)/(x2-x1) is positive. if the value of k is 1 each point is an incresing segment.
+
+e.g. yCoordinates = [6, 5, 7, 8, 10] then k = 3
+
+import java.util.*;
+
+public class IncreasingSegments {
+    public static int countIncreasingSegments(List<Integer> yCoordinates, int k) {
+        int n = yCoordinates.size();
+        if (k == 1) {
+            return n; // Each point is a segment if k == 1
+        }
+
+        int count = 0;
+
+        // Step 1: Traverse the list with a sliding window of size k
+        for (int i = 0; i <= n - k; i++) {
+            boolean isIncreasing = true;
+
+            // Step 2: Check if the current window is strictly increasing
+            for (int j = i; j < i + k - 1; j++) {
+                if (yCoordinates.get(j + 1) <= yCoordinates.get(j)) {
+                    isIncreasing = false;
+                    break;
+                }
+            }
+
+            // Step 3: Increment count if the segment is increasing
+            if (isIncreasing) {
+                count++;
+            }
+        }
+
+        return count;
+    }
+
+    public static void main(String[] args) {
+        List<Integer> yCoordinates = Arrays.asList(6, 5, 7, 8, 10);
+        int k = 3;
+        System.out.println(countIncreasingSegments(yCoordinates, k)); // Expected Output: 2
+    }
+}
