@@ -157,9 +157,19 @@ public class O_HarderCollectors {
 //                .collect(Collectors.toList());
 
         Function<String, Stream<String>> wordToLetters =
-                word -> word.chars().filter(Character::isLetter).mapToObj(Character::toString);
+                word -> word.chars().filter(Character::isLetter)
+                        .mapToObj(Character::toString)
+                        .map(String::toLowerCase);
 
-        String leastUsedLetter = null;
+        String leastUsedLetter = reader.lines()
+                        .flatMap( SPLIT_PATTERN::splitAsStream )
+                        .flatMap(wordToLetters)
+                        .collect( Collectors.groupingBy(Function.identity(), Collectors.counting()) )
+                        .entrySet()
+                        .stream()
+                        .min(Map.Entry.comparingByValue())
+                        .get()
+                        .getKey();
 
         assertThat(leastUsedLetter).isIn("v", "k");
     }
@@ -173,10 +183,25 @@ public class O_HarderCollectors {
      * You can use a variant of the function created for K_SimpleStreams.simpleStream10().
      */
     @Test
-    @Ignore
     public void o_harderCollector05() {
 
-        List<String> leastUsedLetters = null; // TODO
+        Function<String, Stream<String>> wordToLetters =
+                word -> word.chars().filter(Character::isLetter)
+                        .mapToObj(Character::toString)
+                        .map(String::toLowerCase);
+
+        List<String> leastUsedLetters = reader.lines()
+                .flatMap( SPLIT_PATTERN::splitAsStream )
+                .flatMap(wordToLetters)
+                .collect( Collectors.groupingBy(Function.identity(), Collectors.counting()) )
+                .entrySet().stream()
+                .collect( Collectors.groupingBy(
+                        Map.Entry::getValue,
+                        Collectors.mapping( Map.Entry::getKey, Collectors.toList() )
+                )).entrySet().stream()
+                .min( Map.Entry.comparingByKey() )
+                .get()
+                .getValue();
 
         assertThat(leastUsedLetters).hasSize(2);
         assertThat(leastUsedLetters).contains("v", "k");
@@ -195,10 +220,18 @@ public class O_HarderCollectors {
      * {b={3=[bar, baz], 4=[bazz]}, f={3=[foo, foo]}}
      */
     @Test
-    @Ignore
     public void o_harderCollector06() {
+        // output
+        // => Map<key = first letter of the word,
+        //        Map<int -> length of the word , List of word of that length>
+        //       >
 
-        Map<String, Map<Integer, List<String>>> result = null; // TODO
+        Map<String, Map<Integer, List<String>>> result = reader.lines()
+                .flatMap( SPLIT_PATTERN::splitAsStream )
+                .collect(Collectors.groupingBy(
+                        word -> word.substring(0, 1) ,
+                         Collectors.groupingBy( String::length, Collectors.toList() )
+                ));
 
         assertThat(result).hasSize(25);
         assertThat(result.get("a").get(9).toString()).isEqualTo("[abundance]");
@@ -218,13 +251,16 @@ public class O_HarderCollectors {
      * pass over the input.
      */
     @Test
-    @Ignore
     public void o_harderCollector07() {
 
         IntStream input = new Random(987523).ints(20, 0, 100);
+        Map<Boolean, Integer> sumMap = input.boxed()
+                .collect(
+                  Collectors.partitioningBy( n -> n % 2 == 0, Collectors.summingInt( n -> n ))
+                );
 
-        int sumEvens = 0; // TODO
-        int sumOdds = 0; // TODO
+        int sumEvens = sumMap.get(true);
+        int sumOdds = sumMap.get(false);
 
         assertEquals(516, sumEvens);
         assertEquals(614, sumOdds);
