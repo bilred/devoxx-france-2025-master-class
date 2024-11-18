@@ -148,7 +148,18 @@ public class O_HarderCollectors {
     @Test
     public void o_harderCollector04() {
 
-        String leastUsedLetter = null; // TODO
+//        Function<String, List<String>> wordToLetters = s -> s.toLowerCase().chars()
+//                .mapToObj(c -> (char) c)
+//                .filter(Character::isLetter)
+//                .distinct()
+//                .map(String::valueOf)
+//                .sorted()
+//                .collect(Collectors.toList());
+
+        Function<String, Stream<String>> wordToLetters =
+                word -> word.chars().filter(Character::isLetter).mapToObj(Character::toString);
+
+        String leastUsedLetter = null;
 
         assertThat(leastUsedLetter).isIn("v", "k");
     }
