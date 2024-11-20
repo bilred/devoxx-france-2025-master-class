@@ -35,6 +35,9 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * TODO need more practice with this kind of collector "accumulate", "combine"
+ */
 public class P_Challenges {
 
     /**
@@ -45,16 +48,29 @@ public class P_Challenges {
      * correct result.
      */
     @Test
-    @Ignore
     public void p_challenge01() {
-
+        // in "x" and "y" => output "yx xy"
+        //a, b, c => a a + b => ba ab + c => cba abc
         Stream<String> input = Arrays.asList(
                 "a", "b", "c", "d", "e", "f", "g", "h", "i", "j",
                 "k", "l", "m", "n", "o", "p", "q", "r", "s", "t")
-                .parallelStream();
+                .parallelStream(); // important to use the Collected when is in parallelStream
 
-        String result = input.collect(null, null, null).toString();
-        // TODO fill in lambda expressions or method references in place of the nulls in the line above.
+        String result = input.collect( StringBuilder::new,
+                (sb, s) -> sb.insert(0, s).append(s),
+                (sb1, sb2) -> {
+                                                        //System.out.println("in - sb1=>" + sb1);
+                                                        //System.out.println("in - sb2=>" + sb2);
+
+                                                        int half = sb2.length() / 2;
+                                                        sb1.insert(0, sb2.substring(0, half));
+                                                        sb1.append(sb2.substring(half));
+
+                                                        //System.out.println("out - sb1=>" + sb1);
+                                                        //System.out.println("out - sb2=>" + sb2);
+                                                     }
+        ).toString();
+
 
         assertThat(result).isEqualTo("tsrqponmlkjihgfedcbaabcdefghijklmnopqrst");
     }
@@ -74,14 +90,16 @@ public class P_Challenges {
         private int count = 0;
         private final Set<String> set = new HashSet<>();
 
-        // rely on implicit no-arg constructor
+        // rely on implicit no-arg constructor!
 
+        // write code to accumulate a single string into this object
         void accumulate(String s) {
-            // TODO write code to accumulate a single string into this object
+
         }
 
+        // write code to combine the other object into this one
         void combine(TotalAndDistinct other) {
-            // TODO write code to combine the other object into this one
+
         }
 
         int getTotalCount() {
