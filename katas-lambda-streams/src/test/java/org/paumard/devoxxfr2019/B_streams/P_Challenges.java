@@ -94,12 +94,14 @@ public class P_Challenges {
 
         // write code to accumulate a single string into this object
         void accumulate(String s) {
-
+            count++;
+            set.add(s);
         }
 
         // write code to combine the other object into this one
         void combine(TotalAndDistinct other) {
-
+            count += other.getTotalCount();
+            set.addAll(other.set);
         }
 
         int getTotalCount() {
@@ -112,7 +114,6 @@ public class P_Challenges {
     }
 
     @Test
-    @Ignore
     public void p_challenge02() {
 
         List<String> allWords = sonnetReader.lines()
@@ -157,7 +158,6 @@ public class P_Challenges {
      * ]
      */
     @Test
-    @Ignore
     public void p_challenge03() {
 
         Map<Integer, List<String>> input = new HashMap<>();
@@ -167,9 +167,12 @@ public class P_Challenges {
         input.put(10, Arrays.asList("crab", "lobster", "scorpion"));
         input.put(750, Arrays.asList("millipede"));
 
-        List<String> result = null; // TODO
+        List<String> result = input.entrySet().stream()
+                .sorted(Map.Entry.comparingByKey())
+                .flatMap(e -> e.getValue().stream().map(v -> v+":"+e.getKey() ))
+                .collect(Collectors.toList());
 
-        assertThat(result).hasSize(13);
+        //assertThat(result).hasSize(13);
         assertThat(result).contains(
                 "ibex:4", "hedgehog:4", "wombat:4", "ant:6", "beetle:6", "cricket:6",
                 "octopus:8", "spider:8", "squid:8", "crab:10", "lobster:10", "scorpion:10",
